@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MZRSA {
+public struct MZRSA {
     
     //MARK:-  encrypt or decrypt by SecKey String
     
