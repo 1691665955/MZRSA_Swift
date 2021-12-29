@@ -1,6 +1,11 @@
 # MZRSA_Swift
 MZRSA_Swift是一个轻量级框架，框架功能包含RSA加密/解密Data、RSA加密/解密String，支持字符串密钥和证书密钥
 
+### Cocoapods 引入
+```
+pod 'MZRSA_Swift', '~> 0.0.1'
+```
+
 ### 公钥加密&私钥解密(字符串密钥)
 
 - 代码示例
