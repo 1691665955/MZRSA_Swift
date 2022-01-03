@@ -77,6 +77,30 @@ SE6il79JYl3MUcTRxIT0rg==
 
 ```
 
+### 公钥加密&私钥解密(Data密钥)
+```
+let (privateKey, publicKey) = try! CC.RSA.generateKeyPair(2048)
+
+var ss: String = "anksdkdd"
+MZLog(ss)
+ss = MZRSA.encryptString(ss, publicKeyData: publicKey)!
+MZLog(ss)
+ss = MZRSA.decryptString(ss, privateKeyData: privateKey)!
+MZLog(ss)
+```
+
+### 私钥加密&公钥解密(Data密钥)
+```
+let (privateKey, publicKey) = try! CC.RSA.generateKeyPair(2048)
+
+var ss: String = "skdjdjd"
+MZLog(ss)
+ss = MZRSA.encryptString(ss, privateKeyData: privateKey)!
+MZLog(ss)
+ss = MZRSA.decryptString(ss, publicKeyData: publicKey)!
+MZLog(ss)
+```
+
 ### 公钥加密&私钥解密(证书密钥)
 ```
 var hh = "zwefdewfqfewfe"

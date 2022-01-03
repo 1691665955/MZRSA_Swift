@@ -115,7 +115,111 @@ public struct MZRSA {
         return String.init(data: data!, encoding: String.Encoding.utf8)
     }
     
+    //MARK:- encrypt or decrypt by SecKey data
     
+    /// 使用私钥Data加密Data
+    /// - Parameters:
+    ///   - data: 需加密的Data
+    ///   - privateKeyData: 私钥Data
+    /// - Returns: 加密后的Data
+    public static func encryptData(_ data: Data, privateKeyData: Data) -> Data? {
+        let secKey = addPrivateKey(privateKeyData)
+        if secKey == nil {
+            return nil
+        }
+        return encrypt(data, with: secKey!, and: true)
+    }
+    
+    /// 使用私钥Data加密String
+    /// - Parameters:
+    ///   - string: 需加密的String
+    ///   - privateKeyData: 私钥Data
+    /// - Returns: 加密后的String
+    public static func encryptString(_ string: String, privateKeyData: Data) -> String? {
+        guard let data = encryptData(string.data(using: String.Encoding.utf8)!, privateKeyData: privateKeyData) else {
+            return nil
+        }
+        return base64_encode_data(data)
+    }
+    
+    /// 用私钥Data解密Data
+    /// - Parameters:
+    ///   - data: 需解密的Data
+    ///   - privateKeyData: 私钥Data
+    /// - Returns: 解密后的Data
+    public static func decryptData(_ data: Data, privateKeyData: Data) -> Data? {
+        let secKey = addPrivateKey(privateKeyData)
+        if secKey == nil {
+            return nil
+        }
+        return decrypt(data, with: secKey!)
+    }
+    
+    /// 用私钥Data解密String
+    /// - Parameters:
+    ///   - string: 需解密的String
+    ///   - privateKeyData: 私钥Data
+    /// - Returns: 解密后的String
+    public static func decryptString(_ string: String, privateKeyData: Data) -> String? {
+        var data = base64_decode(string)
+        data = decryptData(data!, privateKeyData: privateKeyData)
+        if data == nil {
+            return nil
+        }
+        return String.init(data: data!, encoding: String.Encoding.utf8)
+    }
+    
+    /// 使用公钥Data加密Data
+    /// - Parameters:
+    ///   - data: 需加密的Data
+    ///   - publicKeyData: 公钥Data
+    /// - Returns: 加密后Data
+    public static func encryptData(_ data: Data, publicKeyData: Data) -> Data? {
+        let secKey = addPublicKey(publicKeyData)
+        if secKey == nil {
+            return nil
+        }
+        return encrypt(data, with: secKey!, and: false)
+    }
+    
+    /// 使用公钥Data加密String
+    /// - Parameters:
+    ///   - string: 需加密的String
+    ///   - publicKeyData: 公钥Data
+    /// - Returns: 加密后String
+    public static func encryptString(_ string: String, publicKeyData: Data) -> String? {
+        guard let data = encryptData(string.data(using: String.Encoding.utf8)!, publicKeyData: publicKeyData) else {
+            return nil
+        }
+        return base64_encode_data(data)
+    }
+    
+    /// 使用公钥Data解密Data
+    /// - Parameters:
+    ///   - data: 需解密的Data
+    ///   - publicKeyData: 公钥Data
+    /// - Returns: 解密后Data
+    public static func decryptData(_ data: Data, publicKeyData: Data) -> Data? {
+        let secKey = addPublicKey(publicKeyData)
+        if secKey == nil {
+            return nil
+        }
+        return decrypt(data, with: secKey!)
+    }
+    
+    /// 使用公钥Data解密String
+    /// - Parameters:
+    ///   - string: 需解密的String
+    ///   - publicKeyData: 公钥Data
+    /// - Returns: 解密后String
+    public static func decryptString(_ string: String, publicKeyData: Data) -> String? {
+        var data = base64_decode(string)
+        data = decryptData(data!, publicKeyData: publicKeyData)
+        if data == nil {
+            return nil
+        }
+        return String.init(data: data!, encoding: String.Encoding.utf8)
+    }
     
     //MARK:- encrypt or decrypt by SecKey path
     
@@ -223,9 +327,6 @@ public struct MZRSA {
         }
         return String.init(data: data!, encoding: String.Encoding.utf8)
     }
-    
-    
-    
     
     
     //MARK:- OTHER
@@ -352,6 +453,10 @@ public struct MZRSA {
             return nil
         }
         
+        return addPublicKey(data!)
+    }
+    
+    public static func addPublicKey(_ data: Data) -> SecKey? {
         let tag = "RSAUtil_PubKey"
         let d_tag = tag.data(using: String.Encoding.utf8)
         
@@ -411,6 +516,10 @@ public struct MZRSA {
             return nil
         }
         
+        return addPrivateKey(data!)
+    }
+    
+    private static func addPrivateKey(_ data: Data) -> SecKey? {
         let tag = "RSAUtil_PrivKey"
         let d_tag = tag.data(using: String.Encoding.utf8)
         
